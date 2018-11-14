@@ -1,6 +1,6 @@
 using System;
 
-namespace StatServerCore.ErrorHandling.Exceptions
+namespace Contracts.Exceptions
 {
     public class ServerNotFoundException : Exception
     {

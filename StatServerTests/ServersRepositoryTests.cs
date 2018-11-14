@@ -2,9 +2,9 @@ using System;
 using System.Linq;
 using System.Threading.Tasks;
 using Contracts;
+using Contracts.Exceptions;
 using FluentAssertions;
 using NUnit.Framework;
-using StatServerCore.ErrorHandling.Exceptions;
 using StatServerCore.Extensions;
 using StatServerCore.Model.Mongo;
 
