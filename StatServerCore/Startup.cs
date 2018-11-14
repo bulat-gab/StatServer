@@ -31,7 +31,8 @@ namespace StatServerCore
                     Contact = new Contact {Email = "gabdrakhmanov.br@gmail.com", Name = "Bulat", Url = "https://t.me/bulat_gab"},
                     Description = "My simple web-api .NET Core application",
                     License = new License {Name = "Apache License 2.0", Url = "https://github.com/bulat-gab/StatServer/blob/master/LICENSE"},
-                    Version = "v1"
+                    Version = "v1",
+                    Title = "StatServer"
                 });
 
                 var xmlFile = $"{Assembly.GetExecutingAssembly().GetName().Name}.xml";
@@ -45,13 +46,13 @@ namespace StatServerCore
                 options.Database = Configuration.GetSection("MongoConnection:Database").Value;
             });
         }
-        
+
         public void ConfigureContainer(ContainerBuilder builder)
         {
             builder.RegisterType<StatServerContext>()
                    .As<IStatServerContext>()
                    .SingleInstance();
-            
+
             builder.RegisterType<ServersRepository>()
                    .As<IServersRepository>()
                    .SingleInstance();

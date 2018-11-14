@@ -1,8 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
+using Contracts;
 using Microsoft.AspNetCore.Mvc;
-using StatServerCore.Model.DtoContracts;
 using StatServerCore.Model.Mongo;
 
 namespace StatServerCore.Controllers
@@ -13,10 +13,7 @@ namespace StatServerCore.Controllers
     {
         private readonly IServersRepository serversRepository;
 
-        public ServersController(IServersRepository serversRepository)
-        {
-            this.serversRepository = serversRepository;
-        }
+        public ServersController(IServersRepository serversRepository) => this.serversRepository = serversRepository;
 
         /// <summary>
         ///     Information about all servers
@@ -25,17 +22,13 @@ namespace StatServerCore.Controllers
         [HttpGet("info")]
         [ProducesResponseType(200)]
         [ProducesResponseType(404)]
-        public async Task<IEnumerable<Info>> Get()
-        {
-            return await serversRepository.GetAllServersInfo();
-        }
+        public async Task<IEnumerable<Info>> Get() => await serversRepository.GetAllServersInfo();
 
         /// <summary>
-        ///     Получение текущей информации об игровых серверах
+        ///     Information about particular server
         /// </summary>
         /// <remarks>
-        ///     Если сервер с таким endpoint никогда не присылал advertise-запрос, нужно вернуть пустой ответ с кодом 404 Not
-        ///     Found
+        ///     If there was no advertise-request with the same endpoint, 404 Not Found will be returned
         /// </remarks>
         /// <param name="endpoint"></param>
         /// <returns></returns>
@@ -54,11 +47,13 @@ namespace StatServerCore.Controllers
         }
 
         /// <summary>
-        ///     Прием данных от сервера
+        ///     Receiving data from game servers
         /// </summary>
-        /// <param name="endpoint">уникальным идентификатором сервера</param>
-        /// <param name="info">See this class: <see cref="Match" /></param>
-        /// <returns>Последнюю версию информации, полученную PUT-запросом по этому адресу в том же формате</returns>
+        /// <param name="endpoint">Unique server identifier</param>
+        /// <param name="info">See this class: <see cref="System.Text.RegularExpressions.Match" /></param>
+        /// <returns>
+        ///     The latest version of the information received by a PUT request at this address in the same format.
+        /// </returns>
         [HttpPut("{endpoint}/info")]
         [ProducesResponseType(200)]
         [ProducesResponseType(404)]
@@ -69,13 +64,15 @@ namespace StatServerCore.Controllers
         }
 
         /// <summary>
-        ///     Этот метод должен вернуть информацию о матче, полученную PUT-запросом по этому адресу в том же формате
+        ///     Information about match, that has been received from PUT-request at this address.
         /// </summary>
-        /// <remarks>Если PUT-запроса по этому адресу не было, нужно вернуть пустой ответ с кодом 404 Not Found</remarks>
+        /// <remarks>
+        ///     If there was no PUT request at this address, 404 Not Found will be returned.
+        ///     Если PUT-запроса по этому адресу не было, нужно вернуть пустой ответ с кодом 404 Not Found
+        /// </remarks>
         /// <param name="endpoint"></param>
         /// <param name="timestamp"></param>
         /// <returns></returns>
-        /// <exception cref="NotImplementedException"></exception>
         [HttpGet("{endpoint}/matches/{timestamp}")]
         [ProducesResponseType(200)]
         [ProducesResponseType(404)]
@@ -109,6 +106,6 @@ namespace StatServerCore.Controllers
         [HttpGet("{endpoint}/stats")]
         [ProducesResponseType(200)]
         [ProducesResponseType(404)]
-        public ActionResult<Stats> Stats(string endpoint) => throw new NotImplementedException();
+        public ActionResult<ServerStats> Stats(string endpoint) => throw new NotImplementedException();
     }
 }
