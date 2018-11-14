@@ -1,6 +1,6 @@
-﻿namespace StatServerCore.Model.DtoContracts
+﻿namespace Contracts
 {
-    public class Stats
+    public class ServerStats
     {
         public long TotalMatchesPlayed { get; set; }
 

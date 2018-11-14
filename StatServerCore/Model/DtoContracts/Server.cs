@@ -1,4 +1,6 @@
-﻿namespace StatServerCore.Model.DtoContracts
+﻿using Contracts;
+
+namespace StatServerCore.Model.DtoContracts
 {
     public class Server
     {

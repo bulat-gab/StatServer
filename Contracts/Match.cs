@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace StatServerCore.Model.DtoContracts
+namespace Contracts
 {
     public class Match
     {

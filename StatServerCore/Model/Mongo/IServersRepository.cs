@@ -1,14 +1,14 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
-using StatServerCore.Model.DtoContracts;
+using Contracts;
 
 namespace StatServerCore.Model.Mongo
 {
     public interface IServersRepository
     {
         Task<IEnumerable<Info>> GetAllServersInfo();
-        
+
         Task<Info> GetServerInfo(string endpoint);
 
         Task SaveServerInfo(string endpoint, Info info);
@@ -17,8 +17,10 @@ namespace StatServerCore.Model.Mongo
 
         Task SaveMatch(string endpoint, DateTime timestamp, Match match);
 
-        Task<Stats> GetServerStats(string endpoint);
-     
+        Task<ServerStats> GetServerStats(string endpoint);
+
+        Task<PlayerStats> GetPlayersStats(string name);
+
         // TODO: add other methods
     }
 }

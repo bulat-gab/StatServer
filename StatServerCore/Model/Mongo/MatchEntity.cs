@@ -1,6 +1,6 @@
 ﻿using System;
+using Contracts;
 using MongoDB.Bson.Serialization.Attributes;
-using StatServerCore.Model.DtoContracts;
 
 namespace StatServerCore.Model.Mongo
 {

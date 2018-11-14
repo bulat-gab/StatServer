@@ -2,9 +2,9 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Contracts;
 using MongoDB.Driver;
 using StatServerCore.ErrorHandling.Exceptions;
-using StatServerCore.Model.DtoContracts;
 
 namespace StatServerCore.Model.Mongo
 {
@@ -38,7 +38,7 @@ namespace StatServerCore.Model.Mongo
                 Info = info
             };
 
-           await servers.InsertOneAsync(server);
+            await servers.InsertOneAsync(server);
         }
 
         public async Task<Match> GetMatch(string endpoint, DateTime timestamp)
@@ -68,7 +68,7 @@ namespace StatServerCore.Model.Mongo
             await servers.UpdateOneAsync(x => x.Endpoint.Equals(endpoint), update);
         }
 
-        public async Task<Stats> GetServerStats(string endpoint)
+        public async Task<ServerStats> GetServerStats(string endpoint)
         {
             var serverEntity = await servers.Find(x => x.Endpoint.Equals(endpoint))
                                             .FirstOrDefaultAsync();
@@ -81,21 +81,21 @@ namespace StatServerCore.Model.Mongo
             var grouped = matches.GroupBy(x => x.Timestamp.Date).ToArray();
             var maxPerDay = grouped.OrderByDescending(x => x.Count()).First().Count();
             var averagePerDay = grouped.Average(x => x.Count());
-            
+
             var maxPopulation = matches.Max(x => x.Match.Scoreboard.Length);
             var averagePopulation = matches.Average(x => x.Match.Scoreboard.Length);
             var top5GameModes = matches.GroupBy(x => x.Match.GameMode)
-                                            .OrderByDescending(x => x.Count())
-                                            .Take(5)
-                                            .Select(x => x.Key)
-                                            .ToArray();
+                                       .OrderByDescending(x => x.Count())
+                                       .Take(5)
+                                       .Select(x => x.Key)
+                                       .ToArray();
             var top5Maps = matches.GroupBy(x => x.Match.Map)
-                                            .OrderByDescending(x => x.Count())
-                                            .Take(5)
-                                            .Select(x => x.Key)
-                                            .ToArray();
+                                  .OrderByDescending(x => x.Count())
+                                  .Take(5)
+                                  .Select(x => x.Key)
+                                  .ToArray();
 
-            var stats = new Stats
+            var stats = new ServerStats
             {
                 TotalMatchesPlayed = matches.Length,
                 MaximumMatchesPerDay = maxPerDay,
@@ -108,5 +108,7 @@ namespace StatServerCore.Model.Mongo
 
             return stats;
         }
+
+        public Task<PlayerStats> GetPlayersStats(string name) => throw new NotImplementedException();
     }
 }
