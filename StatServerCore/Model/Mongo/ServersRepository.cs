@@ -124,7 +124,5 @@ namespace StatServerCore.Model.Mongo
 
             return stats;
         }
-
-        public Task<PlayerStats> GetPlayersStats(string name) => throw new NotImplementedException();
     }
 }

@@ -19,8 +19,6 @@ namespace StatServerCore.Model.Mongo
 
         Task<ServerStats> GetServerStats(string endpoint);
 
-        Task<PlayerStats> GetPlayersStats(string name);
-
         // TODO: add other methods
     }
 }
