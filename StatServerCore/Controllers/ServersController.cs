@@ -76,7 +76,10 @@ namespace StatServerCore.Controllers
         [HttpGet("{endpoint}/matches/{timestamp}")]
         [ProducesResponseType(200)]
         [ProducesResponseType(404)]
-        public ActionResult<Match> Match(string endpoint, DateTime timestamp) => throw new NotImplementedException();
+        public async Task<ActionResult<Match>> Match(string endpoint, DateTime timestamp)
+        {
+            return await serversRepository.GetMatch(endpoint, timestamp);
+        }
 
         /// <summary>
         ///     Прием данных о сыгранном матче
@@ -93,7 +96,11 @@ namespace StatServerCore.Controllers
         [HttpPut("{endpoint}/matches/{timestamp}")]
         [ProducesResponseType(200)]
         [ProducesResponseType(400)]
-        public ActionResult<string> Match(string endpoint, DateTime timestamp, [FromBody] Match match) => throw new NotImplementedException();
+        public async Task<ActionResult> Match(string endpoint, DateTime timestamp, [FromBody] Match match)
+        {
+            await serversRepository.SaveMatch(endpoint, timestamp, match);
+            return Ok();
+        }
 
         /// <summary>
         ///     Receive server's stats
@@ -106,6 +113,9 @@ namespace StatServerCore.Controllers
         [HttpGet("{endpoint}/stats")]
         [ProducesResponseType(200)]
         [ProducesResponseType(404)]
-        public ActionResult<ServerStats> Stats(string endpoint) => throw new NotImplementedException();
+        public async Task<ActionResult<ServerStats>> Stats(string endpoint)
+        {
+            return await serversRepository.GetServerStats(endpoint);
+        }
     }
 }
