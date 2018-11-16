@@ -6,8 +6,6 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "StatServerTests", "StatServ
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WorkloadSimulation", "WorkloadSimulation\WorkloadSimulation.csproj", "{E67F094B-D88A-4B63-952E-C95B1D79E718}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "IO.Swagger", "csharp-client-generated\src\IO.Swagger\IO.Swagger.csproj", "{FCC2181D-57AE-42C8-B6B6-01A9DE3FFB58}"
-EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Client", "Client\Client.csproj", "{8DAB5E5A-4119-40C9-8E3A-F096E1D600F2}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Contracts", "Contracts\Contracts.csproj", "{A349CA29-30B9-424E-9F5E-5AE4B0594BD1}"
@@ -30,10 +28,6 @@ Global
 		{E67F094B-D88A-4B63-952E-C95B1D79E718}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{E67F094B-D88A-4B63-952E-C95B1D79E718}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{E67F094B-D88A-4B63-952E-C95B1D79E718}.Release|Any CPU.Build.0 = Release|Any CPU
-		{FCC2181D-57AE-42C8-B6B6-01A9DE3FFB58}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{FCC2181D-57AE-42C8-B6B6-01A9DE3FFB58}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{FCC2181D-57AE-42C8-B6B6-01A9DE3FFB58}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{FCC2181D-57AE-42C8-B6B6-01A9DE3FFB58}.Release|Any CPU.Build.0 = Release|Any CPU
 		{8DAB5E5A-4119-40C9-8E3A-F096E1D600F2}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{8DAB5E5A-4119-40C9-8E3A-F096E1D600F2}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{8DAB5E5A-4119-40C9-8E3A-F096E1D600F2}.Release|Any CPU.ActiveCfg = Release|Any CPU
