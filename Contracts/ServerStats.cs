@@ -1,4 +1,6 @@
-﻿namespace Contracts
+﻿using System;
+
+namespace Contracts
 {
     public class ServerStats
     {
@@ -15,5 +17,19 @@
         public GameMode[] Top5GameModes { get; set; }
 
         public string[] Top5Maps { get; set; }
+
+        public static ServerStats CreateEmpty()
+        {
+            return new ServerStats
+            {
+                TotalMatchesPlayed = 0,
+                MaximumMatchesPerDay = 0,
+                AverageMatchesPerDay = 0,
+                MaximumPopulation = 0,
+                AveragePopulation = 0,
+                Top5GameModes = Array.Empty<GameMode>(),
+                Top5Maps = Array.Empty<string>()
+            }; 
+        }
     }
 }

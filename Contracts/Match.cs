@@ -12,7 +12,7 @@ namespace Contracts
 
         public int TimeLimit { get; set; }
 
-        public DateTime TimeElapsed { get; set; }
+        public TimeSpan TimeElapsed { get; set; }
 
         public Score[] Scoreboard { get; set; }
     }
