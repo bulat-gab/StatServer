@@ -1,5 +1,5 @@
-﻿using MongoDB.Bson.Serialization.Attributes;
-using StatServerCore.Model.DtoContracts;
+﻿using Contracts;
+using MongoDB.Bson.Serialization.Attributes;
 
 namespace StatServerCore.Model.Mongo
 {

@@ -1,4 +1,4 @@
-﻿namespace StatServerCore.Model.DtoContracts
+﻿namespace Contracts
 {
     public class Info
     {

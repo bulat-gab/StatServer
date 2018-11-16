@@ -2,9 +2,10 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Contracts;
 using MongoDB.Driver;
 using StatServerCore.ErrorHandling.Exceptions;
-using StatServerCore.Model.DtoContracts;
+using StatServerCore.Extensions;
 
 namespace StatServerCore.Model.Mongo
 {
@@ -35,10 +36,11 @@ namespace StatServerCore.Model.Mongo
             var server = new ServerEntity
             {
                 Endpoint = endpoint,
-                Info = info
+                Info = info,
+                Matches = Array.Empty<MatchEntity>()
             };
 
-           await servers.InsertOneAsync(server);
+            await servers.InsertOneAsync(server);
         }
 
         public async Task<Match> GetMatch(string endpoint, DateTime timestamp)
@@ -51,9 +53,14 @@ namespace StatServerCore.Model.Mongo
                 throw new ServerNotFoundException(endpoint);
             }
 
-            var match = server.Matches.FirstOrDefault(x => x.Timestamp.Equals(timestamp));
+            var matchEntity = server.Matches.FirstOrDefault(x => timestamp.CompareWith(x.Timestamp));
 
-            return match?.Match;
+            if (matchEntity == null)
+            {
+                throw new MatchNotFoundException(timestamp);
+            }
+            
+            return matchEntity.Match;
         }
 
         public async Task SaveMatch(string endpoint, DateTime timestamp, Match match)
@@ -65,10 +72,14 @@ namespace StatServerCore.Model.Mongo
             };
             var update = Builders<ServerEntity>.Update.Push(x => x.Matches, matchEntity);
 
-            await servers.UpdateOneAsync(x => x.Endpoint.Equals(endpoint), update);
+            var result = await servers.UpdateOneAsync(x => x.Endpoint.Equals(endpoint), update);
+            if (!result.IsAcknowledged || result.ModifiedCount <= 0)
+            {
+                throw new ServerNotFoundException(endpoint);
+            }
         }
 
-        public async Task<Stats> GetServerStats(string endpoint)
+        public async Task<ServerStats> GetServerStats(string endpoint)
         {
             var serverEntity = await servers.Find(x => x.Endpoint.Equals(endpoint))
                                             .FirstOrDefaultAsync();
@@ -78,24 +89,29 @@ namespace StatServerCore.Model.Mongo
             }
 
             var matches = serverEntity.Matches;
+            if (matches.Length == 0)
+            {
+                return ServerStats.CreateEmpty();
+            }
+            
             var grouped = matches.GroupBy(x => x.Timestamp.Date).ToArray();
             var maxPerDay = grouped.OrderByDescending(x => x.Count()).First().Count();
             var averagePerDay = grouped.Average(x => x.Count());
-            
+
             var maxPopulation = matches.Max(x => x.Match.Scoreboard.Length);
             var averagePopulation = matches.Average(x => x.Match.Scoreboard.Length);
             var top5GameModes = matches.GroupBy(x => x.Match.GameMode)
-                                            .OrderByDescending(x => x.Count())
-                                            .Take(5)
-                                            .Select(x => x.Key)
-                                            .ToArray();
+                                       .OrderByDescending(x => x.Count())
+                                       .Take(5)
+                                       .Select(x => x.Key)
+                                       .ToArray();
             var top5Maps = matches.GroupBy(x => x.Match.Map)
-                                            .OrderByDescending(x => x.Count())
-                                            .Take(5)
-                                            .Select(x => x.Key)
-                                            .ToArray();
+                                  .OrderByDescending(x => x.Count())
+                                  .Take(5)
+                                  .Select(x => x.Key)
+                                  .ToArray();
 
-            var stats = new Stats
+            var stats = new ServerStats
             {
                 TotalMatchesPlayed = matches.Length,
                 MaximumMatchesPerDay = maxPerDay,
@@ -108,5 +124,7 @@ namespace StatServerCore.Model.Mongo
 
             return stats;
         }
+
+        public Task<PlayerStats> GetPlayersStats(string name) => throw new NotImplementedException();
     }
 }

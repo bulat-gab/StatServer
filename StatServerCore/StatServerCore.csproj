@@ -47,4 +47,11 @@
       <Version>3.0.0</Version>
     </PackageReference>
   </ItemGroup>
+  <ItemGroup>
+    <_ContentIncludedByDefault Remove="StatServerCore\appsettings.Development.json" />
+    <_ContentIncludedByDefault Remove="StatServerCore\appsettings.json" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\Contracts\Contracts.csproj" />
+  </ItemGroup>
 </Project>

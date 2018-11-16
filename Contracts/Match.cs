@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace StatServerCore.Model.DtoContracts
+namespace Contracts
 {
     public class Match
     {
@@ -12,7 +12,7 @@ namespace StatServerCore.Model.DtoContracts
 
         public int TimeLimit { get; set; }
 
-        public DateTime TimeElapsed { get; set; }
+        public TimeSpan TimeElapsed { get; set; }
 
         public Score[] Scoreboard { get; set; }
     }
