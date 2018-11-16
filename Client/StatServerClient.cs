@@ -30,11 +30,11 @@ namespace Client
         {
         }
 
-        public Task<Info[]> GetAllServersInfo()
+        public async Task<Info[]> GetAllServersInfo()
         {
             var request = new HttpRequestMessage(HttpMethod.Get, "Servers/info");
 
-            return RequestAsync<Info[]>(request);
+            return await RequestAsync<Info[]>(request);
         }
 
         public Task<Info> GetServerInfo(string endpoint)
@@ -90,7 +90,7 @@ namespace Client
         {
             request.Headers.Add("X-Request-Id", Guid.NewGuid().ToString());
 
-            var response = await httpClient.SendAsync(request).ConfigureAwait(false);
+            var response = await httpClient.SendAsync(request);
             var body = await response.Content.ReadAsStringAsync().ConfigureAwait(false);
 
             try
