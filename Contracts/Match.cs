@@ -10,7 +10,7 @@ namespace Contracts
 
         public int FragLimit { get; set; }
 
-        public int TimeLimit { get; set; }
+        public TimeSpan TimeLimit { get; set; }
 
         public TimeSpan TimeElapsed { get; set; }
 
