@@ -5,6 +5,7 @@ using System.Threading.Tasks;
 using Contracts;
 using MongoDB.Driver;
 using StatServerCore.ErrorHandling.Exceptions;
+using StatServerCore.Extensions;
 
 namespace StatServerCore.Model.Mongo
 {
@@ -35,7 +36,8 @@ namespace StatServerCore.Model.Mongo
             var server = new ServerEntity
             {
                 Endpoint = endpoint,
-                Info = info
+                Info = info,
+                Matches = Array.Empty<MatchEntity>()
             };
 
             await servers.InsertOneAsync(server);
@@ -51,9 +53,14 @@ namespace StatServerCore.Model.Mongo
                 throw new ServerNotFoundException(endpoint);
             }
 
-            var match = server.Matches.FirstOrDefault(x => x.Timestamp.Equals(timestamp));
+            var matchEntity = server.Matches.FirstOrDefault(x => timestamp.CompareWith(x.Timestamp));
 
-            return match?.Match;
+            if (matchEntity == null)
+            {
+                throw new MatchNotFoundException(timestamp);
+            }
+            
+            return matchEntity.Match;
         }
 
         public async Task SaveMatch(string endpoint, DateTime timestamp, Match match)
@@ -65,7 +72,11 @@ namespace StatServerCore.Model.Mongo
             };
             var update = Builders<ServerEntity>.Update.Push(x => x.Matches, matchEntity);
 
-            await servers.UpdateOneAsync(x => x.Endpoint.Equals(endpoint), update);
+            var result = await servers.UpdateOneAsync(x => x.Endpoint.Equals(endpoint), update);
+            if (!result.IsAcknowledged || result.ModifiedCount <= 0)
+            {
+                throw new ServerNotFoundException(endpoint);
+            }
         }
 
         public async Task<ServerStats> GetServerStats(string endpoint)
@@ -78,6 +89,11 @@ namespace StatServerCore.Model.Mongo
             }
 
             var matches = serverEntity.Matches;
+            if (matches.Length == 0)
+            {
+                return ServerStats.CreateEmpty();
+            }
+            
             var grouped = matches.GroupBy(x => x.Timestamp.Date).ToArray();
             var maxPerDay = grouped.OrderByDescending(x => x.Count()).First().Count();
             var averagePerDay = grouped.Average(x => x.Count());
