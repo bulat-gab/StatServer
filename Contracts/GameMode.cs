@@ -3,6 +3,10 @@
     public enum GameMode
     {
         DM,
-        TDM
+        TDM,
+        CtF,
+        CaD,
+        TS,
+        KotH
     }
 }

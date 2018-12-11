@@ -29,7 +29,7 @@
       <Version>2.1.1</Version>
     </PackageReference>
     <PackageReference Include="Serilog.Settings.AppSettings">
-      <Version>2.1.2</Version>
+      <Version>2.2.2</Version>
     </PackageReference>
     <PackageReference Include="Serilog.Sinks.ColoredConsole">
       <Version>3.0.1</Version>

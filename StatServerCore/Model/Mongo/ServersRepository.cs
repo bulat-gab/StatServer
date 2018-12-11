@@ -3,8 +3,8 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Contracts;
+using Contracts.Exceptions;
 using MongoDB.Driver;
-using StatServerCore.ErrorHandling.Exceptions;
 using StatServerCore.Extensions;
 
 namespace StatServerCore.Model.Mongo
@@ -57,7 +57,7 @@ namespace StatServerCore.Model.Mongo
 
             if (matchEntity == null)
             {
-                throw new MatchNotFoundException(timestamp);
+                throw new MatchNotFoundException(timestamp.ToString("U"));
             }
             
             return matchEntity.Match;
@@ -124,7 +124,5 @@ namespace StatServerCore.Model.Mongo
 
             return stats;
         }
-
-        public Task<PlayerStats> GetPlayersStats(string name) => throw new NotImplementedException();
     }
 }

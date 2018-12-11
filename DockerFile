@@ -1,0 +1,27 @@
+FROM microsoft/dotnet:2.1-sdk AS build
+WORKDIR /app
+
+# Copy csproj and restore as distinct layers
+COPY StatServerCore/*.csproj ./StatServerCore/
+COPY Contracts/*.csproj ./Contracts/
+WORKDIR /app/StatServerCore
+RUN dotnet restore
+
+# Copy and publish app and libraries
+WORKDIR /app/
+COPY StatServerCore/. ./StatServerCore/
+COPY Contracts/. ./Contracts/
+WORKDIR /app/StatServerCore
+RUN dotnet publish -c Debug -o out
+
+# Test application
+FROM build AS testrunner
+WORKDIR /app/tests
+COPY StatServerTests/. .
+ENTRYPOINT ["dotnet", "StatServerTests.dll"]
+
+# Build runtime image
+FROM microsoft/dotnet:2.1-aspnetcore-runtime AS runtime
+WORKDIR /app
+COPY --from=build /app/StatServerCore/out ./
+ENTRYPOINT ["dotnet", "StatServerCore.dll"]

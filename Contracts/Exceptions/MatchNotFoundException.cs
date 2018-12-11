@@ -1,10 +1,10 @@
 using System;
 
-namespace StatServerCore.ErrorHandling.Exceptions
+namespace Contracts.Exceptions
 {
     public class MatchNotFoundException : Exception
     {
-        public MatchNotFoundException(DateTime timestamp)
+        public MatchNotFoundException(string timestamp)
             : base($"Match {timestamp} is not found.")
         {
         }
